@@ -6,12 +6,20 @@ module Linter
     TEMPLATE_DIR = "#{__DIR__}/template"
 
     class Config
-      property name
-      property version
-      property command
-      property scopes
-      property regex
-      property owner
+      macro property_without_newline(property_name)
+        property {{property_name.id}}
+
+        def {{property_name.id}}=({{property_name.id}})
+          @{{property_name.id}} = {{property_name.id}}.to_s.chomp("\n")
+        end
+      end
+
+      property_without_newline name
+      property_without_newline version
+      property_without_newline command
+      property_without_newline scopes
+      property_without_newline regex
+      property_without_newline owner
       property silent
 
       def initialize
@@ -23,19 +31,6 @@ module Linter
         @owner = "AtomLinter"
         @silent = false
       end
-
-      macro write_without_newline(property_name)
-        def {{property_name.id}}=({{property_name.id}})
-          @{{property_name.id}} = {{property_name.id}}.to_s.chomp("\n")
-        end
-      end
-
-      write_without_newline name
-      write_without_newline version
-      write_without_newline command
-      write_without_newline scopes
-      write_without_newline regex
-      write_without_newline owner
 
       def scopes
         scopes = @scopes.to_s.split(", ")
@@ -124,7 +119,6 @@ config.regex = gets
 puts "Linter Repo Owner:".colorize.bold
 config.owner = gets
 
-puts ""
 puts ""
 
 puts "Beginning Creation of #{config.name}".colorize(:green).bold
