@@ -1,0 +1,20 @@
+{
+  "name": "<%= config.name %>",
+  "main": "./lib/main",
+  "version": "<%= config.version %>",
+  "description": "Lint using the `<%= config.command %>`",
+  "repository": "https://github.com/<%= config.repo %>",
+  "engines": {
+    "atom": ">0.50.0"
+  },
+  "dependencies": {
+    "atom-linter": "^1.0.3"
+  },
+  "providedServices": {
+    "linter": {
+      "versions": {
+        "1.0.0": "provideLinter"
+      }
+    }
+  }
+}

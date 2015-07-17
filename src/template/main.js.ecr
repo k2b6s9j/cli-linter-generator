@@ -1,0 +1,46 @@
+'use babel';
+
+export default {
+  config: {
+    executablePath: {
+      title: 'Executable Path',
+      description: 'The path (with excutable) to be run by Atom in the background. By default the Atom will use the command in your path.',
+      type: 'string',
+      default: '<%= config.command %>'
+    }
+  },
+
+  activate: () => {
+    // Show the user an error if they do not have an appropriate linter base
+    //  package installed from Atom Package Manager. This will not be an issues
+    //  after a base linter package is integrated into Atom, in the comming
+    //  months.
+    // TODO: Remove when Linter Base is integrated into Atom.
+    if(!atom.packages.getLoadedPackages('linter')) {
+      atom.notifications.addError(
+        'Linter package not found.',
+        {
+          detail: 'Please install the `linter` package in your Settings view.'
+        }
+      )
+    }
+  },
+
+  provideLinter: () => {
+    const helpers = require('atom-linter')
+    const regex = '<%= config.regex %>'
+    return {
+      grammarScopes: [<%= config.scopes %>],
+      scope: 'file',
+      lintOnFly: false,
+      lint: (activeEditor) => {
+        const command = atom.config.get('<%= config.name %>.executablePath')
+        const file = activeEditor.getPath()
+        const args = [<%= config.arguments %>]
+        return helpers.execFilePath(command, args, file).then(output =>
+          helpers.parse(output, regex)
+        )
+      }
+    }
+  }
+}
