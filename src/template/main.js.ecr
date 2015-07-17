@@ -30,13 +30,13 @@ export default {
     const helpers = require('atom-linter')
     const regex = '<%= config.regex %>'
     return {
-      grammarScopes: [<%= config.scopes %>],
+      grammarScopes: <%= config.scopes %>,
       scope: 'file',
       lintOnFly: false,
       lint: (activeEditor) => {
         const command = atom.config.get('<%= config.name %>.executablePath')
         const file = activeEditor.getPath()
-        const args = [<%= config.arguments %>]
+        const args = <%= config.arguments %>
         return helpers.execFilePath(command, args, file).then(output =>
           helpers.parse(output, regex)
         )
